@@ -1,11 +1,12 @@
 {
-  "type": "module",
   "dependencies": {
     "@fastify/mongodb": "^10.0.0",
     "@fastify/mysql": "^5.0.2",
     "@fastify/static": "^9.0.0",
     "@fastify/view": "^11.1.1",
+    "@mikro-orm/cli": "^6.6.9",
     "@mikro-orm/core": "^6.6.9",
+    "@mikro-orm/migrations": "^6.6.9",
     "@mikro-orm/mysql": "^6.6.9",
     "@mikro-orm/sqlite": "^6.6.9",
     "@opengis/fastify-hb": "^1.7.4",
@@ -17,10 +18,17 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "dev": "tsc --watch"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": ""
+  "description": "",
+  "devDependencies": {
+    "@types/node": "^25.5.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
+  }
 }
