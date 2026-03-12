@@ -1,0 +1,357 @@
+/* ====== RESET ====== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.hidden {
+    display: none;
+}
+
+/* ====== SFONDO GENERALE ====== */
+body {
+    background: linear-gradient(135deg, #27498a, #67a4bd, #27498a);
+    min-height: 100vh;
+    padding: 0;
+    color: #fff;    
+}
+
+/* ====== TITOLO ====== */
+h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 2.2rem;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+}
+
+/* ============================================================
+   NAVBAR
+   ============================================================ */
+nav {
+    position: sticky;
+    top: 0;
+    z-index: 999;
+    width: 100%;
+    padding: 5px 25px;
+    background: rgba(255, 255, 255, 0.10);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 10px;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 500;
+    padding: 8px 12px;
+    border-radius: 6px;
+    transition: 0.2s;
+}
+
+.nav-auth {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.nav-user {
+    color: white;
+    font-size: 15px;
+}
+
+.nav-btn {
+    padding: 8px 14px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.18);
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    transition: 0.2s;
+}
+
+.nav-btn:hover {
+    background: rgba(255, 255, 255, 0.35);
+}
+
+/* ============================================================
+   FORM METEO
+   ============================================================ */
+form {
+    max-width: 450px;
+    margin: 0 auto 25px auto;
+    padding: 25px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+label {
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+input[type="text"] {
+    width: 100%;
+    padding: 12px;
+    margin-top: 12px;
+    border: none;
+    border-radius: 8px;
+    outline: none;
+    font-size: 1rem;
+    background: rgba(255, 255, 255, 0.678);
+    color: #000;
+}
+
+input[type="text"]:focus {
+    background: rgb(255, 255, 255);
+}
+
+/* ====== BOTTONI ====== */
+button {
+    padding: 10px 18px;
+    margin-right: 10px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.2s ease-in-out;
+}
+
+form button {
+    margin-top: 20px;
+}
+
+button[type="submit"] {
+    background-color: #2E8B57;
+    color: white;
+}
+
+button[type="submit"]:hover {
+    background-color: #3CB371;
+}
+
+button[type="reset"] {
+    background-color: #B22222;
+    color: white;
+}
+
+button[type="reset"]:hover {
+    background-color: #DC143C;
+}
+
+/* ====== AUTOCOMPLETE ====== */
+.input-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+#suggestions {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: rgba(255,255,255,0.85);
+    backdrop-filter: blur(4px);
+    border-radius: 8px;
+    padding: 5px;
+    max-height: 200px;
+    overflow-y: auto;
+    display: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.35);
+    z-index: 999;
+}
+
+.suggestion-item {
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: 0.2s ease;
+    color: #222;
+    font-weight: 500;
+}
+
+.suggestion-item:hover {
+    background: rgba(0,0,0,0.1);
+}
+
+/* ====== PREFERITI ====== */
+#toggle-favorites {
+    padding: 10px 18px;
+    background-color: white;
+    color: #000;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-bottom: 15px;
+    transition: 0.2s ease-in-out;
+}
+
+#toggle-favorites:hover {
+    background-color: #FFEA70;
+}
+
+#favorites-box {
+    max-width: 500px;
+    margin: 0 auto 20px auto;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.18);
+    border-radius: 12px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+}
+
+#favorites-list {
+    list-style: none;
+    margin-top: 10px;
+}
+
+#favorites-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 12px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 8px;
+    margin-bottom: 8px;
+    cursor: pointer;
+}
+
+#favorites-list li:hover {
+    background: rgba(255, 255, 255, 0.200);
+}
+
+.fav-city {
+    flex: 1;
+}
+
+.fav-temp {
+    width: 60px;
+    text-align: right;
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.delete-fav {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #B22222;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.delete-fav:hover {
+    background: #DC143C;
+}
+
+#excel-btn {
+    color: rgba(255, 255, 255, 0.774);
+}
+
+/* ====== RISULTATI METEO ====== */
+#weather-result {
+    display: none;
+    max-width: 500px;
+    margin: 0 auto;
+    margin-bottom: 15px;
+    padding: 25px;
+    background: rgba(255, 255, 255, 0.18);
+    border-radius: 12px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+}
+
+.row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    justify-content: space-between;
+    padding: 8px 12px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 8px;
+    margin-bottom: 5px;
+}
+
+/* ====== STELLA ====== */
+#favorite-star {
+    float: left;
+    cursor: pointer;
+    font-size: 26px;
+    margin-right: 6px;
+    transition: transform 0.2s ease, color 0.2s ease;
+    position: relative;
+    z-index: 10;
+}
+
+#favorite-star:hover {
+    transform: scale(1.2);
+    color: gold;
+}
+
+/* ====== ERRORI ====== */
+#error {
+    color: #ffdddd;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+/* ====== RESPONSIVE ====== */
+@media (max-width: 700px) {
+    nav {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 20px;
+        gap: 18px;
+    }
+
+    nav ul {
+        flex-direction: column;
+        width: 100%;
+        gap: 12px;
+        padding: 0;
+        margin: 0;
+    }
+
+    nav ul li {
+        width: 100%;
+    }
+
+    nav ul li a {
+        display: block;
+        width: 100%;
+        padding: 12px 0;
+        border-radius: 8px;
+        transition: 0.2s;
+    }
+
+    .nav-auth {
+        width: 50%;
+        gap: 24px;
+    }
+
+    .nav-btn {
+        width: 100%;
+        padding: 12px 0;
+        background: rgba(255, 255, 255, 0.18);
+    }
+}

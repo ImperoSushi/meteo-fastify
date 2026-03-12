@@ -1,0 +1,26 @@
+{
+  "type": "module",
+  "dependencies": {
+    "@fastify/mongodb": "^10.0.0",
+    "@fastify/mysql": "^5.0.2",
+    "@fastify/static": "^9.0.0",
+    "@fastify/view": "^11.1.1",
+    "@mikro-orm/core": "^6.6.9",
+    "@mikro-orm/mysql": "^6.6.9",
+    "@mikro-orm/sqlite": "^6.6.9",
+    "@opengis/fastify-hb": "^1.7.4",
+    "fastify": "^5.8.2",
+    "fastify-plugin": "^5.1.0",
+    "handlebars": "^4.7.8"
+  },
+  "name": "meteo-fastify",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
