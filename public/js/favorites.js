@@ -12,17 +12,14 @@ function formatFavorite(fav) {
 function createFavoriteItem(fav, formatted) {
     const li = document.createElement("li");
 
-    // Città
     const city = document.createElement("span");
     city.className = "fav-city";
     city.innerHTML = `<strong>${formatted.cityLabel}</strong>`;
 
-    // Temperatura
     const temp = document.createElement("span");
     temp.className = "fav-temp";
     temp.textContent = formatted.temperatureLabel;
 
-    // Bottone elimina
     const del = document.createElement("button");
     del.className = "delete-fav";
     del.dataset.id = fav.id;
@@ -44,10 +41,9 @@ function renderFavorites(favorites) {
 
     list.innerHTML = "";
 
-    if (favorites.error === "login_required") {
-        title.textContent = "Devi eseguire l'accesso";
+    if (!Array.isArray(favorites)) {
+        title.textContent = "Errore nel caricamento";
         excelBtn.style.display = "none";
-
         return;
     }
 
@@ -95,15 +91,13 @@ function renderFavorites(favorites) {
     });
 }
 
-
 //  API FUNCTIONS
 
 async function loadFavorites() {
-    const res = await fetch("/favorites/list");
+    const res = await fetch("/cities");
 
-    if (res.status === 401) {
-        renderFavorites({ error: "login_required" });
-
+    if (!res.ok) {
+        renderFavorites([]);
         return;
     }
 
@@ -135,11 +129,8 @@ async function updateTemperatureFromAPI(fav, tempSpan) {
     }
 }
 
-function addFavorite(city, country, lat, lon) {
-    const temperature = document.getElementById("temp").textContent.replace("°C", "");
-    const description = document.getElementById("desc").textContent;
-
-    fetch("/favorites/add", {
+function addFavorite(city, country, lat, lon, temperature, description) {
+    fetch("/cities", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -151,40 +142,22 @@ function addFavorite(city, country, lat, lon) {
             description
         })
     })
-    .then(res => {
-        if (res.status === 401) {
-            alert("Per aggiungere ai preferiti devi effettuare il login.");
-
-            return;
-        }
-
-        return res.json();
-    })
-    .then(data => {
-        if (data) loadFavorites();
-    });
+        .then(res => res.json())
+        .then(() => loadFavorites());
 }
 
 function updateFavorite(id, temperature, description) {
-    fetch("/favorites/update", {
-        method: "POST",
+    fetch(`/cities/${id}`, {
+        method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id, temperature, description })
+        body: JSON.stringify({ temperature, description })
     });
 }
 
 function deleteFavorite(id) {
-    fetch(`/favorites/delete/${id}`, { method: "DELETE" })
-        .then(res => {
-            if (res.status === 401) {
-                alert("Non sei autorizzato a eliminare questo preferito.");
-                
-                return;
-            }
-            loadFavorites();
-        });
+    fetch(`/cities/${id}`, { method: "DELETE" })
+        .then(() => loadFavorites());
 }
-
 
 //  SHOW/HIDE FAVORITES
 

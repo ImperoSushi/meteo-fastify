@@ -1,26 +1,13 @@
-import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
+import { defineEntity, p } from '@mikro-orm/core';
 
-@Entity({ tableName: 'favorite_city' })
-export class FavoriteCity {
-
-  @PrimaryKey()
-  id!: number;
-
-  @Property()
-  city!: string;
-
-  @Property()
-  country!: string;
-
-  @Property()
-  latitude!: number;
-
-  @Property()
-  longitude!: number;
-
-  @Property({ nullable: true })
-  temperature?: number;
-
-  @Property({ nullable: true })
-  description?: string;
-}
+export const FavoriteCity = defineEntity({
+  name: 'FavoriteCity',
+  tableName: 'favorite_city',
+  properties: {
+    id: p.integer().primary(),
+    city: p.string(),
+    country: p.string(),
+    latitude: p.float(),
+    longitude: p.float(),
+  },
+});

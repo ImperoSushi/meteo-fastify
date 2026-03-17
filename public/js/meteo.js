@@ -1,4 +1,3 @@
-
 // ELEMENTS
 
 const elsObject = {
@@ -16,8 +15,6 @@ const elsObject = {
     suggestions: document.getElementById('suggestions')
 };
 
-const GEO_API = 'https://geocoding-api.open-meteo.com/v1';
-
 let suggestionTimeout = null;
 
 
@@ -34,7 +31,6 @@ addEventListeners();
 function onCityInput(ev) {
     const input = ev.target;
 
-    // reset dataset
     input.dataset.lat = "";
     input.dataset.lon = "";
     input.dataset.country = "";
@@ -43,7 +39,6 @@ function onCityInput(ev) {
 
     if (query.length < 2) {
         elsObject.suggestions.style.display = "none";
-
         return;
     }
 
@@ -52,43 +47,23 @@ function onCityInput(ev) {
 }
 
 
-// FETCH SUGGESTIONS
+// FETCH SUGGESTIONS (ADATTATO PER FASTIFY)
 
 async function fetchSuggestions(query) {
-    const url = `${GEO_API}/search?name=${encodeURIComponent(query)}&language=it&count=10`;
+    const url = `/cities/search?search=${encodeURIComponent(query)}`;
 
     const res = await fetch(url);
     const text = await res.text();
 
-    // risposta non JSON
-    if (!text.startsWith("{")) {
+    if (!text.startsWith("[")) {
         elsObject.suggestions.style.display = "none";
-
         return;
     }
 
-    const data = JSON.parse(text);
+    const results = JSON.parse(text);
 
-    if (!data.results) {
+    if (!Array.isArray(results) || results.length === 0) {
         elsObject.suggestions.style.display = "none";
-
-        return;
-    }
-
-    // filtri
-    const validTypes = ["PPL", "PPLA", "PPLA2", "PPLC"];
-    let results = data.results.filter(city =>
-        validTypes.includes(city.feature_code) &&
-        (city.population ?? 0) > 100 &&
-        city.country?.trim() !== ""
-    );
-
-    results.sort((a, b) => (b.population ?? 0) - (a.population ?? 0));
-    results = results.slice(0, 3);
-
-    if (results.length === 0) {
-        elsObject.suggestions.style.display = "none";
-
         return;
     }
 
@@ -99,7 +74,7 @@ async function fetchSuggestions(query) {
 // FORMATTING FUNCTION
 
 function formatSuggestion(city) {
-    return `${city.name}, ${city.country}`;
+    return `${city.city}, ${city.country}`;
 }
 
 
@@ -111,7 +86,7 @@ function createSuggestionItem(city) {
     item.textContent = formatSuggestion(city);
 
     item.addEventListener("click", () => {
-        elsObject.cityInput.value = city.name;
+        elsObject.cityInput.value = city.city;
         elsObject.cityInput.dataset.lat = city.latitude;
         elsObject.cityInput.dataset.lon = city.longitude;
         elsObject.cityInput.dataset.country = city.country;
@@ -163,7 +138,6 @@ function onFormReset(ev) {
 async function weatherFun(cityName) {
     if (!cityName) {
         alert("Inserisci una città");
-
         return;
     }
 
@@ -185,7 +159,6 @@ async function weatherFun(cityName) {
 
     if (!text.startsWith("{")) {
         showError("Errore temporaneo del servizio meteo. Riprova tra qualche secondo.");
-
         return;
     }
 

@@ -1,4 +1,13 @@
 {
+  "type": "module",
+  "name": "meteo-fastify",
+  "version": "1.0.0",
+  "main": "dist/server.js",
+  "scripts": {
+    "dev": "ts-node-dev --respawn --transpile-only --esm src/server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js"
+  },
   "dependencies": {
     "@fastify/mongodb": "^10.0.0",
     "@fastify/mysql": "^5.0.2",
@@ -14,21 +23,10 @@
     "fastify-plugin": "^5.1.0",
     "handlebars": "^4.7.8"
   },
-  "name": "meteo-fastify",
-  "version": "1.0.0",
-  "main": "index.js",
-  "scripts": {
-    "build": "tsc",
-    "start": "node dist/server.js",
-    "dev": "tsc --watch"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
   "devDependencies": {
     "@types/node": "^25.5.0",
     "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
     "typescript": "^5.9.3"
   }
 }

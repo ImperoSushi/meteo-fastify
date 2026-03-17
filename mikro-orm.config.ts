@@ -1,12 +1,11 @@
-import { MySqlDriver } from '@mikro-orm/mysql';
-import { FavoriteCity } from './src/entities/FavoriteCity.js';
+import { defineConfig } from '@mikro-orm/mysql';
 
-export default {
-  entities: [FavoriteCity],
+export default defineConfig({
+  entities: ['./dist/entities'],
+  entitiesTs: ['./src/entities'],
   dbName: 'weather',
   user: 'weather_user',
   password: 'extark2025',
   host: 'localhost',
   port: 3306,
-  driver: MySqlDriver,
-};
+});
