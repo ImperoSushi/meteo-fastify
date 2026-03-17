@@ -42,7 +42,7 @@ function renderFavorites(favorites) {
     list.innerHTML = "";
 
     if (!Array.isArray(favorites)) {
-        title.textContent = "Errore nel caricamento";
+        title.textContent = "Devi eseguire l'accesso";
         excelBtn.style.display = "none";
         return;
     }

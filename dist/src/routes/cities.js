@@ -1,8 +1,25 @@
 import { FavoriteCity } from '../entities/FavoriteCity.js';
 const citiesRoute = async (fastify) => {
+    // GET /cities/search
+    fastify.get('/cities/search', async (request, reply) => {
+        const { search } = request.query;
+        if (!search || search.length < 2) {
+            return reply.send([]);
+        }
+        const cities = await fastify.orm.em.find(FavoriteCity, {
+            city: { $ilike: `%${search}%` }
+        });
+        return cities;
+    });
     // GET /cities
     fastify.get('/cities', async () => {
-        return fastify.orm.em.find(FavoriteCity, {});
+        try {
+            return await fastify.orm.em.find(FavoriteCity, {});
+        }
+        catch (error) {
+            fastify.log.error(error);
+            return { error: 'Database error' };
+        }
     });
     // GET /cities/:id
     fastify.get('/cities/:id', async (request, reply) => {

@@ -3,9 +3,29 @@ import { FavoriteCity } from '../entities/FavoriteCity.js';
 
 const citiesRoute: FastifyPluginAsync = async (fastify) => {
 
+    // GET /cities/search
+    fastify.get('/cities/search', async (request, reply) => {
+        const { search } = request.query as { search: string };
+
+        if (!search || search.length < 2) {
+            return reply.send([]);
+        }
+
+        const cities = await fastify.orm.em.find(FavoriteCity, {
+            city: { $ilike: `%${search}%` }
+        });
+
+        return cities;
+    });
+
     // GET /cities
     fastify.get('/cities', async () => {
-        return fastify.orm.em.find(FavoriteCity, {});
+        try {
+            return await fastify.orm.em.find(FavoriteCity, {});
+        } catch (error) {
+            fastify.log.error(error);
+            return { error: 'Database error' };
+        }
     });
 
     // GET /cities/:id
@@ -27,6 +47,7 @@ const citiesRoute: FastifyPluginAsync = async (fastify) => {
             country: string;
             latitude: number;
             longitude: number;
+            user_id: number;
         };
 
         const city = fastify.orm.em.create(FavoriteCity, body);

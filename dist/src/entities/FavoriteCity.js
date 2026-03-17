@@ -8,5 +8,8 @@ export const FavoriteCity = defineEntity({
         country: p.string(),
         latitude: p.float(),
         longitude: p.float(),
+        temperature: p.float().nullable(),
+        description: p.string().nullable(),
+        user_id: p.integer(),
     },
 });

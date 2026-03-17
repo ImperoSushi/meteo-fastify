@@ -47,7 +47,7 @@ function onCityInput(ev) {
 }
 
 
-// FETCH SUGGESTIONS (ADATTATO PER FASTIFY)
+// FETCH SUGGESTIONS
 
 async function fetchSuggestions(query) {
     const url = `/cities/search?search=${encodeURIComponent(query)}`;

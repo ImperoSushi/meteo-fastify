@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Meteo - API</title>
+    <link rel="stylesheet" href="/public/css/meteo.css">
+</head>
+
+<body>
+    <nav>
+        <ul>
+            <li><a href="/">
+                    <h2>MeteoApp ⛅</h2>
+                </a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <h1>API Meteo</h1>
+        <p>Questa è una pagina di test per l'API meteo.</p>
+
+        <div class="api-info">
+            <h3>Endpoint disponibili:</h3>
+            <ul>
+                <li><strong>POST /meteo/api</strong> - Ottieni le condizioni meteo per una città</li>
+                <li><strong>GET /cities</strong> - Lista delle città preferite</li>
+                <li><strong>POST /cities</strong> - Aggiungi una città ai preferiti</li>
+                <li><strong>GET /export_excel</strong> - Esporta le città preferite in Excel</li>
+            </ul>
+        </div>
+
+        <div class="test-form">
+            <h3>Test API Meteo:</h3>
+            <form id="api-test-form">
+                <input type="text" id="test-city" placeholder="Inserisci una città" required>
+                <button type="submit">Test API</button>
+            </form>
+            <div id="api-result" class="result-box"></div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('api-test-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const city = document.getElementById('test-city').value;
+            const resultDiv = document.getElementById('api-result');
+
+            try {
+                const response = await fetch('/meteo/api', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ city })
+                });
+
+                const data = await response.json();
+
+                if (data.error) {
+                    resultDiv.innerHTML = `<p style="color: red;">Errore: ${data.error}</p>`;
+                } else {
+                    resultDiv.innerHTML = `
+                        <h4>Risultato:</h4>
+                        <p><strong>Città:</strong> ${data.city}</p>
+                        <p><strong>Paese:</strong> ${data.country}</p>
+                        <p><strong>Temperatura:</strong> ${data.temperature}°C</p>
+                        <p><strong>Condizioni:</strong> ${data.description}</p>
+                        <p><strong>Latitudine:</strong> ${data.latitude}</p>
+                        <p><strong>Longitudine:</strong> ${data.longitude}</p>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<p style="color: red;">Errore di rete: ${error.message}</p>`;
+            }
+        });
+    </script>
+</body>
+
+</html>
