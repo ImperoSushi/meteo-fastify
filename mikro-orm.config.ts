@@ -8,4 +8,11 @@ export default defineConfig({
   password: 'extark2025',
   host: 'localhost',
   port: 3306,
+  driverOptions: {
+    connection: {
+      socketPath: '/opt/lampp/var/mysql/mysql.sock'
+    }
+  },
+
+  debug: true,
 });

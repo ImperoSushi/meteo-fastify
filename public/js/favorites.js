@@ -41,12 +41,6 @@ function renderFavorites(favorites) {
 
     list.innerHTML = "";
 
-    if (!Array.isArray(favorites)) {
-        title.textContent = "Devi eseguire l'accesso";
-        excelBtn.style.display = "none";
-        return;
-    }
-
     if (favorites.length === 0) {
         title.textContent = "Nessun preferito";
         excelBtn.style.display = "none";
@@ -102,6 +96,12 @@ async function loadFavorites() {
     }
 
     const data = await res.json();
+
+    if (data.error || !Array.isArray(data)) {
+        renderFavorites([]);
+        return;
+    }
+
     renderFavorites(data);
 }
 

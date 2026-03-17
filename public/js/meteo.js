@@ -1,3 +1,4 @@
+
 // ELEMENTS
 
 const elsObject = {
@@ -12,8 +13,11 @@ const elsObject = {
     lat: document.getElementById('lat'),
     lon: document.getElementById('lon'),
     favoriteStar: document.getElementById('favorite-star'),
-    suggestions: document.getElementById('suggestions')
+    suggestions: document.getElementById('suggestions'),
+    map: document.getElementById("map")
 };
+
+const GEO_API = 'https://geocoding-api.open-meteo.com/v1';
 
 let suggestionTimeout = null;
 
@@ -31,6 +35,7 @@ addEventListeners();
 function onCityInput(ev) {
     const input = ev.target;
 
+    // reset dataset
     input.dataset.lat = "";
     input.dataset.lon = "";
     input.dataset.country = "";
@@ -39,6 +44,7 @@ function onCityInput(ev) {
 
     if (query.length < 2) {
         elsObject.suggestions.style.display = "none";
+
         return;
     }
 
@@ -50,20 +56,38 @@ function onCityInput(ev) {
 // FETCH SUGGESTIONS
 
 async function fetchSuggestions(query) {
-    const url = `/cities/search?search=${encodeURIComponent(query)}`;
+    const url = `${GEO_API}/search?name=${encodeURIComponent(query)}&language=it&count=10`;
 
     const res = await fetch(url);
     const text = await res.text();
 
-    if (!text.startsWith("[")) {
+    // risposta non JSON
+    if (!text.startsWith("{")) {
         elsObject.suggestions.style.display = "none";
+
         return;
     }
 
-    const results = JSON.parse(text);
+    const data = JSON.parse(text);
 
-    if (!Array.isArray(results) || results.length === 0) {
+    if (!data.results) {
         elsObject.suggestions.style.display = "none";
+
+        return;
+    }
+
+    // filtri
+    const validTypes = ["PPL", "PPLA", "PPLA2", "PPLC"];
+    let results = data.results.filter(city =>
+        validTypes.includes(city.feature_code) && (city.population ?? 0) > 100 && city.country.trim() !== ""
+    );
+
+    results.sort((cityA, cityB) => (cityB.population ?? 0) - (cityA.population ?? 0));
+    results = results.slice(0, 3);
+
+    if (results.length === 0) {
+        elsObject.suggestions.style.display = "none";
+
         return;
     }
 
@@ -74,7 +98,7 @@ async function fetchSuggestions(query) {
 // FORMATTING FUNCTION
 
 function formatSuggestion(city) {
-    return `${city.city}, ${city.country}`;
+    return `${city.name}, ${city.country}`;
 }
 
 
@@ -86,7 +110,7 @@ function createSuggestionItem(city) {
     item.textContent = formatSuggestion(city);
 
     item.addEventListener("click", () => {
-        elsObject.cityInput.value = city.city;
+        elsObject.cityInput.value = city.name;
         elsObject.cityInput.dataset.lat = city.latitude;
         elsObject.cityInput.dataset.lon = city.longitude;
         elsObject.cityInput.dataset.country = city.country;
@@ -129,7 +153,7 @@ function onFormReset(ev) {
     clearForm();
     hideError();
     elsObject.cityInput.value = "";
-    document.getElementById("map").style.display = "none";
+    elsObject.map.style.display = "none";
 }
 
 
@@ -138,6 +162,7 @@ function onFormReset(ev) {
 async function weatherFun(cityName) {
     if (!cityName) {
         alert("Inserisci una città");
+
         return;
     }
 
@@ -159,6 +184,7 @@ async function weatherFun(cityName) {
 
     if (!text.startsWith("{")) {
         showError("Errore temporaneo del servizio meteo. Riprova tra qualche secondo.");
+
         return;
     }
 
@@ -185,7 +211,7 @@ function clearForm() {
     elsObject.desc.textContent = "";
     elsObject.lat.textContent = "";
     elsObject.lon.textContent = "";
-    document.getElementById("map").style.display = "none";
+    elsObject.map.style.display = "none";
     elsObject.favoriteStar.style.display = "none";
     elsObject.suggestions.style.display = "none";
 }

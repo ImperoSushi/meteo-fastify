@@ -8,10 +8,10 @@ const citiesRoute: FastifyPluginAsync = async (fastify) => {
         const { search } = request.query as { search: string };
 
         if (!search || search.length < 2) {
-            return reply.send([]);
+            return [];
         }
 
-        const cities = await fastify.orm.em.find(FavoriteCity, {
+        const cities = await fastify.em.find(FavoriteCity, {
             city: { $ilike: `%${search}%` }
         });
 
@@ -20,18 +20,14 @@ const citiesRoute: FastifyPluginAsync = async (fastify) => {
 
     // GET /cities
     fastify.get('/cities', async () => {
-        try {
-            return await fastify.orm.em.find(FavoriteCity, {});
-        } catch (error) {
-            fastify.log.error(error);
-            return { error: 'Database error' };
-        }
+        return await fastify.em.find(FavoriteCity, {});
     });
 
     // GET /cities/:id
     fastify.get('/cities/:id', async (request, reply) => {
         const { id } = request.params as { id: number };
-        const city = await fastify.orm.em.findOne(FavoriteCity, { id });
+
+        const city = await fastify.em.findOne(FavoriteCity, { id });
 
         if (!city) {
             return reply.code(404).send({ error: 'City not found' });
@@ -48,12 +44,14 @@ const citiesRoute: FastifyPluginAsync = async (fastify) => {
             latitude: number;
             longitude: number;
             user_id: number;
+            temperature?: number;
+            description?: string;
         };
 
-        const city = fastify.orm.em.create(FavoriteCity, body);
-        fastify.orm.em.persist(city);
-        await fastify.orm.em.flush();
+        const city = fastify.em.create(FavoriteCity, body);
 
+        fastify.em.persist(city);
+        await fastify.em.flush();
 
         return reply.code(201).send(city);
     });
@@ -66,31 +64,33 @@ const citiesRoute: FastifyPluginAsync = async (fastify) => {
             country: string;
             latitude: number;
             longitude: number;
+            temperature: number;
+            description: string;
         }>;
 
-        const city = await fastify.orm.em.findOne(FavoriteCity, { id });
+        const city = await fastify.em.findOne(FavoriteCity, { id });
 
         if (!city) {
             return reply.code(404).send({ error: 'City not found' });
         }
 
-        fastify.orm.em.assign(city, body);
-        await fastify.orm.em.flush();
-
-        return reply.send(city);
+        fastify.em.assign(city, body);
+        await fastify.em.flush();
+        return city;
     });
 
     // DELETE /cities/:id
     fastify.delete('/cities/:id', async (request, reply) => {
         const { id } = request.params as { id: number };
-        const city = await fastify.orm.em.findOne(FavoriteCity, { id });
+
+        const city = await fastify.em.findOne(FavoriteCity, { id });
 
         if (!city) {
             return reply.code(404).send({ error: 'City not found' });
         }
 
-        fastify.orm.em.remove(city);
-        await fastify.orm.em.flush();
+        fastify.em.remove(city);
+        await fastify.em.flush();
 
         return reply.code(204).send();
     });

@@ -1,11 +1,15 @@
-import { FastifyPluginAsync } from 'fastify';
+import fp from 'fastify-plugin';
 import { MikroORM } from '@mikro-orm/core';
 import config from '../../mikro-orm.config.js';
 
-const ormPlugin: FastifyPluginAsync = async (fastify) => {
+export default fp(async (fastify) => {
   try {
     const orm = await MikroORM.init(config);
-    fastify.orm = orm;
+
+    const em = orm.em.fork();
+
+    fastify.decorate('orm', orm);
+    fastify.decorate('em', em);
 
     fastify.addHook('onClose', async () => {
       await orm.close();
@@ -13,9 +17,7 @@ const ormPlugin: FastifyPluginAsync = async (fastify) => {
 
     fastify.log.info('ORM initialized successfully');
   } catch (error) {
-    fastify.log.error(error as Error, 'Failed to initialize ORM');
+    fastify.log.error(error, 'Failed to initialize ORM');
     throw error;
   }
-};
-
-export default ormPlugin;
+});
