@@ -2,7 +2,7 @@ import { defineEntity, p } from '@mikro-orm/core';
 
 export const FavoriteCity = defineEntity({
   name: 'FavoriteCity',
-  tableName: 'favorite_city',
+  tableName: 'favorite_city_fastify',
   properties: {
     id: p.integer().primary(),
     city: p.string(),
@@ -11,6 +11,5 @@ export const FavoriteCity = defineEntity({
     longitude: p.float(),
     temperature: p.float().nullable(),
     description: p.string().nullable(),
-    user_id: p.integer(),
   },
 });

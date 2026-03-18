@@ -43,7 +43,6 @@ const citiesRoute: FastifyPluginAsync = async (fastify) => {
             country: string;
             latitude: number;
             longitude: number;
-            user_id: number;
             temperature?: number;
             description?: string;
         };
